@@ -52,7 +52,8 @@
         type='text/css'>
     <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,800,700,600,300' rel='stylesheet' type='text/css'>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-
+    <script src="https://www.google.com/recaptcha/api.js" async defer>
+    </script>
 </head>
 
 <body>
@@ -227,6 +228,22 @@
                         </div>
                         <div class="contact-form-right">
                             <textarea placeholder="Message" id="FrmMessage" name="message" required></textarea>
+
+                            <div class="g-recaptcha" data-sitekey="6LfQF0MpAAAAAKaqZFx6MkWdoEaWuoDa6dAUBCRA"
+                                data-callback="onRecaptchaSuccess" data-expired-callback="onRecaptchaResponseExpiry"
+                                data-error-callback="onRecaptchaError">
+                            </div>
+
+                            <!-- Recaptcha Error -->
+                            <div id="contactForm-error" style="display: none" class="alert alert-success">
+                                Please fill the recaptcha checkbox!
+                            </div>
+
+                            <!-- Recaptcha Success -->
+                            <div id="contactForm-success" style="display: none" class="alert alert-danger">
+                                Recaptcha validated Successfully!
+                            </div>
+
                             <input type="Submit" id="btnSubmit" value="SUBMIT" />
                         </div>
                     </form>
@@ -281,6 +298,45 @@
         function hideURLbar() {
             window.scrollTo(0, 1);
         }
+
+        let isRecaptchaValidated = false;
+
+        function toggleRecaptchaFormMessage(type = "error", hide = false) {
+            document.getElementById(`contactForm-${type}`).style.display = hide
+                ? "none"
+                : "inherit";
+        }
+
+        function onRecaptchaSuccess() {
+            isRecaptchaValidated = true;
+        }
+
+        function onRecaptchaError() {
+            toggleRecaptchaFormMessage("error");
+            toggleRecaptchaFormMessage("success", true);
+        }
+
+        function onRecaptchaResponseExpiry() {
+            onRecaptchaError();
+        }
+
+        window.onload = function () {
+            const recaptchaForm = document.getElementById("contactForm");
+            recaptchaForm.addEventListener("submit", function (e) {
+                e.preventDefault();
+
+                // failure
+                if (!isRecaptchaValidated) {
+                    toggleRecaptchaFormMessage("error");
+                    toggleRecaptchaFormMessage("success", true);
+                    return;
+                }
+
+                // success
+                toggleRecaptchaFormMessage("error", true);
+                toggleRecaptchaFormMessage("success");
+            });
+        };
     </script>
 </body>
 
