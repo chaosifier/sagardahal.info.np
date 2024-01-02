@@ -229,7 +229,7 @@
                         <div class="contact-form-right">
                             <textarea placeholder="Message" id="FrmMessage" name="message" required></textarea>
 
-                            <div class="g-recaptcha" data-sitekey="6LeHIEMpAAAAAA618uLlEzg82Rl5isJxMYcxAmcG"
+                            <div class="g-recaptcha" data-sitekey="6LeHIEMpAAAAAErkY3YFo5xm5Uw0XEcLKegvUxY_"
                                 data-callback="onRecaptchaSuccess" data-expired-callback="onRecaptchaResponseExpiry"
                                 data-error-callback="onRecaptchaError">
                             </div>
@@ -237,11 +237,6 @@
                             <!-- Recaptcha Error -->
                             <div id="contactForm-error" style="display: none" class="alert alert-success">
                                 Please fill the recaptcha checkbox!
-                            </div>
-
-                            <!-- Recaptcha Success -->
-                            <div id="contactForm-success" style="display: none" class="alert alert-danger">
-                                Recaptcha validated Successfully!
                             </div>
 
                             <input type="Submit" id="btnSubmit" value="SUBMIT" />
@@ -313,7 +308,6 @@
 
         function onRecaptchaError() {
             toggleRecaptchaFormMessage("error");
-            toggleRecaptchaFormMessage("success", true);
         }
 
         function onRecaptchaResponseExpiry() {
@@ -328,13 +322,13 @@
                 // failure
                 if (!isRecaptchaValidated) {
                     toggleRecaptchaFormMessage("error");
-                    toggleRecaptchaFormMessage("success", true);
                     return;
                 }
 
                 // success
                 toggleRecaptchaFormMessage("error", true);
-                toggleRecaptchaFormMessage("success");
+
+                recaptchaForm.submit();
             });
         };
     </script>
